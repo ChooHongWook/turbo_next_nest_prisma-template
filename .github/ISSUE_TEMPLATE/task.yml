@@ -3,7 +3,8 @@ description: 새로운 작업(Task)을 생성합니다
 title: '[TASK] '
 labels: ['enhancement']
 projects: ['site_temp_project']
-assignees: ['@me']
+assignees:
+  - 'ChooHongWook'
 body:
   - type: markdown
     attributes:
