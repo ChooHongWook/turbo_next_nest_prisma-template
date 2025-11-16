@@ -4,7 +4,7 @@ title: '[TASK] '
 labels: ['enhancement']
 projects: ['site_temp_project']
 assignees:
-  - 'ChooHongWook'
+  - '@me'
 body:
   - type: markdown
     attributes:
