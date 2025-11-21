@@ -1,8 +1,8 @@
-version: "3"
-
 volumes:
-  database:
-    driver: local
+  postgres_data:
+  # Note: for mysql_data
+  # database:
+  #   driver: local
 
 services:
   postgres:
@@ -15,7 +15,8 @@ services:
       POSTGRES_PASSWORD: prismapass
       POSTGRES_DB: postgres_db
     volumes:
-      - database:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+
 
   # mysql:
   #   platform: linux/amd64
