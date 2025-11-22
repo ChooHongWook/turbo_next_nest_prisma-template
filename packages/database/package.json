@@ -4,6 +4,7 @@
   "exports": {
     "./*": "./src/*.ts"
   },
+  "type": "module",
   "scripts": {
     "dev": "tsup src/* --watch",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -11,10 +12,10 @@
     "db:push": "prisma db push",
     "db:seed": "tsx src/seed.ts",
     "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
     "prebuild": "npm run db:generate",
     "predev": "npm run db:generate",
     "format": "prisma format",
-    "studio": "prisma studio",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
