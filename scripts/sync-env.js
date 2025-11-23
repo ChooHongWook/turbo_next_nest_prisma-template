@@ -7,6 +7,18 @@ const ROOT = path.join(__dirname, "..");
 const ROOT_ENV_FILE_NAME = ".env.shared";
 const SOURCE_ENV = path.join(ROOT, ROOT_ENV_FILE_NAME);
 
+// SOURCE_ENV 파일이 없으면 .env.shared.example에서 복사
+if (!fs.existsSync(SOURCE_ENV)) {
+  const exampleEnvPath = path.join(ROOT, ".env.shared.example");
+  if (fs.existsSync(exampleEnvPath)) {
+    fs.copyFileSync(exampleEnvPath, SOURCE_ENV);
+    console.log(`[env] Created ${ROOT_ENV_FILE_NAME} from .env.shared.example`);
+  } else {
+    console.error(`[env] Error: Neither ${ROOT_ENV_FILE_NAME} nor .env.shared.example found!`);
+    process.exit(1);
+  }
+}
+
 // 안에 있는 디렉토리만 가져오는 함수
 /**
  * @param {string} srcPath
