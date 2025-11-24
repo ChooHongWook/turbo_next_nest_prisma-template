@@ -1,7 +1,7 @@
 import { Button } from '@repo/ui/button';
 import Image, { type ImageProps } from 'next/image';
 import { prisma } from '@repo/database/client';
-import { getLinks } from '../links';
+import { getLinks } from '@api/links';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
