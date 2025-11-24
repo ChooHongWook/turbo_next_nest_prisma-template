@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Monorepo with Next.js frontend and Nest.js backend and Prisma ORM",
   "private": true,
-  "scripts": {   
+  "scripts": {
+    "start": "turbo run start",
     "predev": "pnpm sync:env && turbo run predev",
     "prebuild": "pnpm sync:env && turbo run prebuild",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "sync:env": "node ./scripts/sync-env.js", 
+    "sync:env": "node ./scripts/sync-env.js",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "// 1": "Turbo에서 interactive 작업을 막는 것을 방지하기 위해서 직접 폴더로 들어가서 작동",
     "db:migrate:dev": "cd packages/database && pnpm run db:migrate:dev",
@@ -45,5 +46,8 @@
   "engines": {
     "node": ">=22.19.0",
     "npm": ">=10.9.0"
+  },
+  "volta": {
+    "node": "22.19.0"
   }
 }

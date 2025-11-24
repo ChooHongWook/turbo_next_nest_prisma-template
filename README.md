@@ -9,6 +9,10 @@ docker-compose up -d
 ```
 
 ```bash
+pnpm run build
+```
+
+```bash
 pnpm run db:migrate:dev
 ```
 
@@ -17,7 +21,9 @@ pnpm run db:seed
 ```
 
 ```bash
-pnpm run build
+pnpm run dev
+# or
+pnpm run start
 ```
 
 ### Apps and Packages
