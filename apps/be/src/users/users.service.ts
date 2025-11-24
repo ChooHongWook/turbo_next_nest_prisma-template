@@ -5,7 +5,7 @@ import { CreateUserDto, UpdateUserDto } from '@repo/api';
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
-  
+
   create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
       data: createUserDto,

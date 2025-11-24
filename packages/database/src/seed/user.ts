@@ -1,11 +1,11 @@
-import { prisma } from "../client";
+import { prisma } from '../client';
 
-import type { User } from "../../generated/client";
+import type { User } from '../../generated/client';
 
 const DEFAULT_USERS = [
   {
-    name: "Tim Apple",
-    email: "tim@apple.com",
+    name: 'Tim Apple',
+    email: 'tim@apple.com',
   },
 ] as Array<Partial<User>>;
 
@@ -23,8 +23,8 @@ export const seedUsers = async () => {
           create: {
             ...user,
           },
-        })
-      )
+        }),
+      ),
     );
   } catch (error) {
     console.error(error);
@@ -32,4 +32,4 @@ export const seedUsers = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};

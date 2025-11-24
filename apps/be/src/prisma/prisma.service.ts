@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from "@repo/database/client";
-
+import { PrismaClient } from '@repo/database/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -10,7 +9,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     // Log all queries to the console
     this.$on('query', (e) => {
       console.log('Query:', e.query);
-    });  
-
+    });
   }
 }

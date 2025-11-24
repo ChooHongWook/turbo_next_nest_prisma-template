@@ -4,9 +4,12 @@ const API_URL = process.env.API_URL || 'http://localhost:3000';
 
 // export const dynamic = 'force-dynamic';
 
-export const Fetch = async (input:string | URL | Request, init?: RequestInit): Promise<Response> => {
+export const Fetch = async (
+  input: string | URL | Request,
+  init?: RequestInit,
+): Promise<Response> => {
   return fetch(`${API_URL}${input}`, init);
-}
+};
 
 export async function getLinks(): Promise<Link[]> {
   try {

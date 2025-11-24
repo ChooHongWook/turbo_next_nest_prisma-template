@@ -1,6 +1,6 @@
 import { Button } from '@repo/ui/button';
 import Image, { type ImageProps } from 'next/image';
-import { prisma } from "@repo/database/client";
+import { prisma } from '@repo/database/client';
 import { getLinks } from '../links';
 import styles from './page.module.css';
 
@@ -23,7 +23,7 @@ const ThemeImage = (props: Props) => {
 };
 
 export default async function Home() {
-    const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany();
 
   const links = await getLinks();
 
@@ -45,7 +45,7 @@ export default async function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
-      <pre>{JSON.stringify(users, null, 2)}</pre>
+        <pre>{JSON.stringify(users, null, 2)}</pre>
 
         <div className={styles.ctas}>
           <a
