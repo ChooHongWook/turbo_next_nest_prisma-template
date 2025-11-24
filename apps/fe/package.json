@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.10",
     "next": "^15.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
@@ -21,6 +22,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",
+    "@tanstack/react-query-devtools": "^5.91.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
