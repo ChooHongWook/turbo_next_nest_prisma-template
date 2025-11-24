@@ -9,7 +9,9 @@
     "baseUrl": ".",
     "paths": {
       "@api": ["src/api"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@provider": ["src/provider"],
+      "@provider/*": ["src/provider/*"]
     }
   },
   "include": [
