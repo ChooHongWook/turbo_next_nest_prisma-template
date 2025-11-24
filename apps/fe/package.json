@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/database": "workspace:*",
     "@tanstack/react-query-devtools": "^5.91.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
