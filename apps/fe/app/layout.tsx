@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Provider from '@provider';
+import { notoSans } from '@config/bigContents';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -23,8 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="ko">
+      <body
+        className={`${geistSans.className} ${geistMono.className} ${notoSans.className}`}
+      >
         <Provider>{children}</Provider>
       </body>
     </html>
