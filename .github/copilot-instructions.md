@@ -113,6 +113,29 @@ packages/api/src/
 
 All exports centralized in `packages/api/src/entry.ts` for clean imports.
 
+**Entity Implementation Pattern**: Entities must implement the corresponding Prisma type:
+
+```typescript
+// packages/api/src/users/entities/user.entity.ts
+import { User as PrismaUser } from '@repo/database/client';
+
+export class User implements PrismaUser {
+  id: number;
+  email: string;
+  name: string;
+  emailVerified: Date | null;
+
+  constructor(data: PrismaUser) {
+    this.id = data.id;
+    this.email = data.email;
+    this.name = data.name;
+    this.emailVerified = data.emailVerified;
+  }
+}
+```
+
+This ensures compile-time type safety when the Prisma schema changes.
+
 ### Frontend API Configuration
 
 Frontend uses axios with baseURL from `apps/fe/src/config/axios.ts`:
@@ -153,6 +176,26 @@ export async function getLinks() {
 - Client Components: Use REST API for mutations and client-side data fetching
 - Both share types from `@repo/api` for type safety
 
+**Error Handling Pattern** (Client-side API calls):
+
+```typescript
+// apps/fe/src/api/links/index.ts
+export async function getLinks(): Promise<Link[]> {
+  try {
+    const res = await api.get<Link[]>(`/links`);
+    if (!res.data) {
+      throw new Error('Failed to fetch links');
+    }
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching links:', error);
+    return []; // Return safe default instead of throwing
+  }
+}
+```
+
+Client-side API functions return safe defaults on error to prevent UI crashes.
+
 ### React Query Configuration
 
 Next.js App Router uses a **server/client-aware QueryClient** pattern:
@@ -176,10 +219,12 @@ Default settings: `staleTime: 60000ms`, enables dehydration for pending queries.
 Frontend uses custom path aliases defined in `apps/fe/tsconfig.json`:
 
 ```typescript
-import { getLinks } from '@api/links'; // → src/api/links
-import { api } from '@config/axios'; // → src/config/axios
-import Provider from '@provider'; // → src/provider
+import { getLinks } from '@/api/links'; // → src/api/links
+import { api } from '@/config/axios'; // → src/config/axios
+import Provider from '@/provider'; // → src/provider
 ```
+
+**Note**: The alias is `@/*` mapping to `./src/*`, not `@api/*` or `@config/*`.
 
 ### NestJS Module Pattern
 
@@ -195,6 +240,32 @@ Each domain module imports `PrismaModule` for database access:
 ```
 
 Services inject `PrismaService` and use type-safe Prisma Client methods.
+
+**Service Implementation Pattern**:
+
+```typescript
+// apps/be/src/users/users.service.ts
+import { PrismaService } from '@/prisma/prisma.service';
+import { CreateUserDto, UpdateUserDto } from '@repo/api';
+import { User } from '@repo/database/client';
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  create(createUserDto: CreateUserDto): Promise<User> {
+    return this.prisma.user.create({ data: createUserDto });
+  }
+
+  findAll(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
+  // ... other CRUD methods
+}
+```
+
+**Important**: Use DTOs from `@repo/api` for input, return Prisma types from `@repo/database/client` for output.
 
 ### DTO Pattern with Mapped Types
 
