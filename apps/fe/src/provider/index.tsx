@@ -1,12 +1,9 @@
-import ReactQueryProvider from './ReactQueryProvider';
-import ThemeProvider from './ThemeProvider';
+/**
+ * Provider Exports
+ *
+ * Centralized export point for all providers.
+ */
 
-const Provider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <ThemeProvider>
-      <ReactQueryProvider>{children}</ReactQueryProvider>
-    </ThemeProvider>
-  );
-};
-
-export default Provider;
+export { default as ReactQueryProvider } from './ReactQueryProvider';
+export { default as ThemeProvider } from './ThemeProvider';
+export { default as RootProvider } from './RootProvider';
