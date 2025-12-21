@@ -5,7 +5,7 @@
 
 # Turborepo Fullstack Template
 
-> Next.js, NestJS, Prisma ORM을 포함한 프로덕션 준비 완료 모노레포 템플릿
+> Next.js, NestJS, Prisma ORM을 포함한 프로덕션 준비 완료된 모노레포 템플릿
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D22.19.0-brightgreen)](https://nodejs.org)
