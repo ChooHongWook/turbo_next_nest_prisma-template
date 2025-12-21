@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
+import { setupAuthInterceptors } from '@/lib/auth/axios-interceptors';
 
 interface IError {
   code: number;
@@ -17,3 +18,5 @@ export const api: AxiosInstance = axios.create({
   baseURL,
   withCredentials: false,
 });
+
+setupAuthInterceptors(api);

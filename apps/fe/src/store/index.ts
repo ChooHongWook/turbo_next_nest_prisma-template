@@ -7,3 +7,4 @@
 export { useCounterStore } from './useCounterStore';
 export { useUserStore } from './useUserStore';
 export { useTodoStore } from './useTodoStore';
+export { useAuthStore } from './useAuthStore';

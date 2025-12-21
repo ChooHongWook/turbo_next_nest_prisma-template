@@ -4,6 +4,7 @@ import './globals.css';
 import { RootProvider } from '@/provider';
 import { notoSans } from '@/config/bigContents';
 import { Header } from '@/components/common';
+import { ProtectedRoute } from '@/components/auth';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -30,8 +31,10 @@ export default function RootLayout({
         className={`${geistSans.className} ${geistMono.className} ${notoSans.className}`}
       >
         <RootProvider>
-          <Header />
-          {children}
+          <ProtectedRoute>
+            <Header />
+            {children}
+          </ProtectedRoute>
         </RootProvider>
       </body>
     </html>
