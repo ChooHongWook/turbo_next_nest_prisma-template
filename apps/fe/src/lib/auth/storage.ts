@@ -1,45 +1,27 @@
-import Cookies from 'js-cookie';
-
 const ACCESS_TOKEN_KEY = 'auth_access_token';
 const REFRESH_TOKEN_KEY = 'auth_refresh_token';
 
 const isClient = typeof window !== 'undefined';
 
-// 쿠키 만료: 7일 (refresh token TTL과 일치)
-const COOKIE_EXPIRES = 7;
-
-// 쿠키 설정
-const getCookieOptions = (): Cookies.CookieAttributes => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const isHttps = isClient && window.location.protocol === 'https:';
-
-  return {
-    expires: COOKIE_EXPIRES, // 7일
-    path: '/', // 전체 도메인에서 사용 가능
-    sameSite: 'Lax', // CSRF 보호 + 일반 네비게이션 허용
-    secure: isProduction && isHttps, // 프로덕션에서만 HTTPS 필수
-  };
-};
-
 export const TokenStorage = {
   getAccessToken: (): string | null => {
     if (!isClient) return null;
-    return Cookies.get(ACCESS_TOKEN_KEY) || null;
+    return localStorage.getItem(ACCESS_TOKEN_KEY);
   },
 
   setAccessToken: (token: string): void => {
     if (!isClient) return;
-    Cookies.set(ACCESS_TOKEN_KEY, token, getCookieOptions());
+    localStorage.setItem(ACCESS_TOKEN_KEY, token);
   },
 
   getRefreshToken: (): string | null => {
     if (!isClient) return null;
-    return Cookies.get(REFRESH_TOKEN_KEY) || null;
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
   },
 
   setRefreshToken: (token: string): void => {
     if (!isClient) return;
-    Cookies.set(REFRESH_TOKEN_KEY, token, getCookieOptions());
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
   },
 
   setTokens: (accessToken: string, refreshToken: string): void => {
@@ -49,8 +31,8 @@ export const TokenStorage = {
 
   clearTokens: (): void => {
     if (!isClient) return;
-    Cookies.remove(ACCESS_TOKEN_KEY, { path: '/' });
-    Cookies.remove(REFRESH_TOKEN_KEY, { path: '/' });
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
 
     // 마이그레이션 정리: 기존 sessionStorage 토큰 제거
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
