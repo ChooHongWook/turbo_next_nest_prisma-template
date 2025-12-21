@@ -98,6 +98,7 @@ coverage
 test-results/
 playwright/.cache/
 playwright-report/
+**/e2e/screenshots/
 
 # Turbo repo cache
 .turbo
