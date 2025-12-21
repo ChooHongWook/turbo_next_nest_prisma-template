@@ -186,6 +186,41 @@ From `turbo.json`:
 - PostgreSQL: localhost:5432
 - Prisma Studio: http://localhost:5555
 
+## UI Components
+
+### shadcn/ui Integration
+
+**CRITICAL**: This project uses **shadcn/ui** for all UI components. Always use shadcn/ui components instead of creating custom ones.
+
+**Setup:**
+- Components are located in `apps/fe/components/ui/`
+- Configuration: `apps/fe/components.json`
+- Styling: Tailwind CSS v3 with CSS variables
+- Utility function: `cn()` in `apps/fe/lib/utils.ts`
+
+**Adding new components:**
+```bash
+npx shadcn@latest add <component-name>
+```
+
+**Usage example:**
+```typescript
+import { Button } from "@/components/ui/button";
+
+export default function Page() {
+  return <Button variant="default">Click me</Button>;
+}
+```
+
+**Available shadcn MCP:**
+The project has shadcn MCP configured in `.mcp.json` for AI-assisted component management.
+
+**Styling guidelines:**
+- Use Tailwind utility classes
+- Use `cn()` utility for conditional classes
+- Follow shadcn's variant patterns for customization
+- Dark mode is supported via CSS variables (`.dark` class)
+
 ## Tech Stack Versions
 
 - Node.js: >=22.19.0
@@ -196,6 +231,8 @@ From `turbo.json`:
 - React: 19.x
 - Prisma: 6.19.0
 - TypeScript: 5.5.4
+- Tailwind CSS: 3.4.x
+- shadcn/ui: latest
 
 ## Important Files
 

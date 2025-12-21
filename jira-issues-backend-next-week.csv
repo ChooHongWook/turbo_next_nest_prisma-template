@@ -1,0 +1,37 @@
+Summary,Issue Type,Priority,Description,Labels
+JWT 기반 인증/인가 시스템 구현,Task,High,"• JWT 토큰 기반 인증 구현
+• Passport.js 통합 (@nestjs/passport, passport-jwt)
+• 로그인/회원가입 API 엔드포인트 추가
+• AuthGuard 및 Custom Decorator (@CurrentUser 등) 구현
+• Refresh Token 관리 및 자동 갱신
+• 패스워드 암호화 (bcrypt)","backend,authentication,high-priority"
+NestJS Swagger/OpenAPI 문서 자동화,Task,High,"• @nestjs/swagger 패키지 설치 및 설정
+• 모든 DTO에 ApiProperty 데코레이터 추가
+• Controller에 ApiTags, ApiOperation, ApiResponse 데코레이터 추가
+• /api-docs 엔드포인트에서 Swagger UI 제공
+• API 스키마 자동 생성 및 export","backend,documentation,high-priority"
+Winston 로거 통합 및 로깅 전략 수립,Task,Medium,"• Winston 또는 Pino 로거 설치 및 설정
+• HTTP 요청/응답 로깅 미들웨어 구현
+• 에러 로깅 자동화 (Exception Filter 통합)
+• 로그 레벨 및 포맷 설정 (dev/prod 환경 분리)
+• 로그 파일 rotation 설정","backend,logging,medium-priority"
+표준화된 에러 처리 시스템 구축,Task,High,"• Custom Exception Filter 구현 (AllExceptionsFilter)
+• 표준화된 에러 응답 형식 정의 (code, message, timestamp)
+• HTTP Exception 처리 (400, 401, 403, 404, 500 등)
+• 비즈니스 로직 에러 처리 (Custom Exception 클래스)
+• 에러 로깅과 모니터링 연동","backend,error-handling,high-priority"
+ConfigModule 통합 및 타입 안전한 환경 변수 관리,Task,Medium,"• @nestjs/config 설치 및 설정
+• 환경 변수 스키마 밸리데이션 (Joi 또는 class-validator)
+• 타입 안전한 ConfigService 구현
+• dev/staging/prod 환경별 설정 파일 분리
+• 민감한 정보 관리 (.env 파일 보안)","backend,configuration,medium-priority"
+서비스 헬스 체크 API 구현,Task,Low,"• @nestjs/terminus 패키지 통합
+• Database 헬스 체크 (Prisma connection)
+• /health, /health/ready, /health/live 엔드포인트 구현
+• Kubernetes readiness/liveness probe 지원
+• 메모리/디스크 사용량 체크","backend,health-check,low-priority"
+DTO 밸리데이션 규칙 강화 및 표준화,Task,Medium,"• ValidationPipe 글로벌 설정 (whitelist, transform)
+• 모든 DTO에 class-validator 데코레이터 추가
+• 커스텀 밸리데이터 구현 (이메일, 비밀번호, 전화번호 등)
+• 밸리데이션 에러 메시지 한글화
+• API 문서에 밸리데이션 규칙 표시","backend,validation,medium-priority"

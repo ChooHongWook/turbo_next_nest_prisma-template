@@ -20,10 +20,11 @@ Turborepo 기반으로 구성된 **타입 세이프 풀스택 모노레포** 템
 - ⚡ **Next.js 15** – App Router 및 Turbopack 기반의 React 프레임워크
 - 🚀 **NestJS 11** – 효율적인 서버 애플리케이션 구축을 위한 Node.js 프레임워크
 - 🗄️ **Prisma ORM** – 타입 안전한 차세대 ORM
+- 🎨 **shadcn/ui + Tailwind CSS** – 재사용 가능하고 커스터마이징 가능한 UI 컴포넌트 시스템
 - 🔄 **Shared Packages** – 프론트/백엔드에서 공통으로 사용하는 타입 및 API 계약
 - 🐳 **Docker** – 일관된 개발 환경을 위한 PostgreSQL 컨테이너
-- 🎨 **ESLint + Prettier** – Husky pre-commit 훅을 포함한 코드 품질 관리
-- 🧪 **Jest** – 모든 패키지를 위한 테스트 환경
+- 🎯 **ESLint + Prettier** – Husky pre-commit 훅을 포함한 코드 품질 관리
+- 🧪 **Jest + Playwright** – 유닛 테스트 및 E2E 테스트 환경
 - 📦 **pnpm** – 빠르고 공간 효율적인 패키지 매니저
 
 ## 🏛️ 아키텍처

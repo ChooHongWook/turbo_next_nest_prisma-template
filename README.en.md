@@ -21,10 +21,11 @@ A **type-safe fullstack monorepo** built with Turborepo, featuring Next.js 15 (A
 - ⚡ **Next.js 15** - React framework with App Router and Turbopack
 - 🚀 **NestJS 11** - Progressive Node.js framework for building efficient server-side applications
 - 🗄️ **Prisma ORM** - Next-generation ORM with type-safe database access
+- 🎨 **shadcn/ui + Tailwind CSS** - Reusable and customizable UI component system
 - 🔄 **Shared Packages** - Type-safe API contracts shared between frontend and backend
 - 🐳 **Docker** - PostgreSQL containerization for consistent development environments
-- 🎨 **ESLint + Prettier** - Code quality and formatting with Husky pre-commit hooks
-- 🧪 **Jest** - Testing framework configured for all packages
+- 🎯 **ESLint + Prettier** - Code quality and formatting with Husky pre-commit hooks
+- 🧪 **Jest + Playwright** - Unit testing and E2E testing framework
 - 📦 **pnpm** - Fast, disk space efficient package manager
 
 ## 🏛️ Architecture
