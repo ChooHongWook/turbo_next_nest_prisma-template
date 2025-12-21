@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AxiosError } from 'axios';
-import type { User } from '@repo/api';
 import { useAuthStore } from '@/store';
 import { TokenStorage } from '@/lib/auth/storage';
 import { getCurrentUser } from '@/api/auth';
@@ -30,24 +28,12 @@ export default function AuthProvider({
         const accessToken = TokenStorage.getAccessToken()!;
         const refreshToken = TokenStorage.getRefreshToken()!;
 
-        setAuth(user as User, accessToken, refreshToken);
+        setAuth(user as any, accessToken, refreshToken);
       } catch (error) {
         console.error('Failed to initialize auth:', error);
-
-        // 401/403 에러만 clearAuth (토큰 만료/무효)
-        // 네트워크 에러는 토큰 유지 (다음 요청에서 재시도 가능)
-        if (error instanceof AxiosError) {
-          if (error.response?.status === 401 || error.response?.status === 403) {
-            clearAuth();
-          } else {
-            // 토큰은 유지하되 초기화는 완료
-            setInitialized(true);
-          }
-        } else {
-          // Axios 에러가 아닌 경우도 토큰 유지
-          setInitialized(true);
-        }
+        clearAuth();
       } finally {
+        setInitialized(true);
         setLoading(false);
       }
     };
