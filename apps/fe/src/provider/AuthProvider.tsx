@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import type { User } from '@repo/api';
 import { useAuthStore } from '@/store';
 import { TokenStorage } from '@/lib/auth/storage';
 import { getCurrentUser } from '@/api/auth';
@@ -30,7 +29,7 @@ export default function AuthProvider({
         const accessToken = TokenStorage.getAccessToken()!;
         const refreshToken = TokenStorage.getRefreshToken()!;
 
-        setAuth(user as User, accessToken, refreshToken);
+        setAuth(user, accessToken, refreshToken);
       } catch (error) {
         console.error('Failed to initialize auth:', error);
 

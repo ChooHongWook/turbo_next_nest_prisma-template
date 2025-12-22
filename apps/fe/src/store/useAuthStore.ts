@@ -3,16 +3,18 @@ import { devtools } from 'zustand/middleware';
 import type { User } from '@repo/api';
 import { TokenStorage } from '@/lib/auth/storage';
 
+type AuthUser = Omit<User, 'password' | 'refreshToken'>;
+
 interface AuthState {
   isAuthenticated: boolean;
   isInitialized: boolean;
   isLoading: boolean;
   error: string | null;
-  user: User | null;
+  user: AuthUser | null;
 
-  setAuth: (user: User, accessToken: string, refreshToken: string) => void;
+  setAuth: (user: AuthUser, accessToken: string, refreshToken: string) => void;
   clearAuth: () => void;
-  setUser: (user: User) => void;
+  setUser: (user: AuthUser) => void;
   updateTokens: (accessToken: string, refreshToken: string) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
