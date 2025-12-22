@@ -1,6 +1,17 @@
 {
-  "enabledMcpjsonServers": ["shadcn", "atlassian", "playwright"],
   "permissions": {
-    "allow": ["Bash(pnpm run lint)"]
-  }
+    "allow": [
+      "Bash(pnpm run lint)",
+      "Bash(tar:*)",
+      "Bash(pnpm playwright test:*)",
+      "Bash(lsof:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "atlassian",
+    "playwright"
+  ]
 }
