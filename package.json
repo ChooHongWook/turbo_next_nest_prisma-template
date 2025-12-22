@@ -4,6 +4,7 @@
   "description": "Monorepo with Next.js frontend and Nest.js backend and Prisma ORM",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "start": "turbo run start",
     "predev": "pnpm sync:env && turbo run predev",
     "prebuild": "pnpm sync:env && turbo run prebuild",
