@@ -13,8 +13,15 @@ import { useState } from 'react';
  * - Complex state updates with Immer
  */
 export function TodoExample() {
-  const { todos, filter, addTodo, toggleTodo, removeTodo, setFilter, clearCompleted } =
-    useTodoStore();
+  const {
+    todos,
+    filter,
+    addTodo,
+    toggleTodo,
+    removeTodo,
+    setFilter,
+    clearCompleted,
+  } = useTodoStore();
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {

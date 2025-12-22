@@ -48,10 +48,7 @@ export default async function Home() {
         <pre>{JSON.stringify(users, null, 2)}</pre>
 
         <div className={styles.ctas}>
-          <a
-            href="/zustand-examples"
-            className={styles.primary}
-          >
+          <a href="/zustand-examples" className={styles.primary}>
             View Zustand Examples
           </a>
           <a

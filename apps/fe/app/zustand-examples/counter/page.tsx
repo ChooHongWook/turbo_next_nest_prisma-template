@@ -1,7 +1,4 @@
-import {
-  CounterExample,
-  OptimizedCounterDisplay,
-} from '@/components/examples';
+import { CounterExample, OptimizedCounterDisplay } from '@/components/examples';
 
 export default function CounterExamplePage() {
   return (
@@ -39,7 +36,8 @@ export default function CounterExamplePage() {
               Persist Middleware
             </h3>
             <p className="text-gray-600 mb-2">
-              The counter store uses the <code className="bg-gray-100 px-2 py-1 rounded">persist</code>
+              The counter store uses the{' '}
+              <code className="bg-gray-100 px-2 py-1 rounded">persist</code>
               middleware to automatically save state to localStorage. This means
               your counter value will be preserved even after closing the
               browser.
@@ -57,7 +55,10 @@ export default function CounterExamplePage() {
               Selector Optimization
             </h3>
             <p className="text-gray-600 mb-2">
-              The <code className="bg-gray-100 px-2 py-1 rounded">OptimizedCounterDisplay</code>
+              The{' '}
+              <code className="bg-gray-100 px-2 py-1 rounded">
+                OptimizedCounterDisplay
+              </code>
               component demonstrates how to use selectors to optimize
               re-renders. By selecting only the specific state you need,
               components only re-render when that particular piece of state

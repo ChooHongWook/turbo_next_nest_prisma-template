@@ -6,7 +6,12 @@
     },
     "atlassian": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/inspector", "mcp-remote", "https://mcp.atlassian.com/v1/sse"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/inspector",
+        "mcp-remote",
+        "https://mcp.atlassian.com/v1/sse"
+      ]
     },
     "playwright": {
       "command": "npx",

@@ -36,7 +36,7 @@ export function setupAuthInterceptors(axiosInstance: AxiosInstance) {
 
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
   );
 
   axiosInstance.interceptors.response.use(
@@ -97,6 +97,6 @@ export function setupAuthInterceptors(axiosInstance: AxiosInstance) {
       } finally {
         isRefreshing = false;
       }
-    }
+    },
   );
 }

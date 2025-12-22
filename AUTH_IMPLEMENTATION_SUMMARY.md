@@ -20,6 +20,7 @@
 ## 1. 초기 구현 (완료)
 
 ### 1.1 백엔드 분석
+
 - commit `30808c1`: JWT 기반 인증/인가 시스템 (NestJS)
 - Access Token: 15분 만료
 - Refresh Token: 7일 만료
@@ -29,12 +30,14 @@
 **생성된 파일 (15개)**:
 
 **Infrastructure:**
+
 - `apps/fe/src/lib/auth/storage.ts` - 토큰 저장소 유틸리티
 - `apps/fe/src/lib/auth/axios-interceptors.ts` - 자동 토큰 갱신 인터셉터
 - `apps/fe/src/store/useAuthStore.ts` - Zustand 인증 상태 관리
 - `apps/fe/src/api/auth/index.ts` - 인증 API 레이어
 
 **Components:**
+
 - `apps/fe/src/components/auth/LoginForm.tsx` - 로그인 폼
 - `apps/fe/src/components/auth/RegisterForm.tsx` - 회원가입 폼
 - `apps/fe/src/components/auth/LogoutButton.tsx` - 로그아웃 버튼
@@ -43,14 +46,17 @@
 - `apps/fe/src/components/common/UserProfile.tsx` - 사용자 프로필
 
 **Providers:**
+
 - `apps/fe/src/provider/AuthProvider.tsx` - 인증 초기화 프로바이더
 
 **Pages:**
+
 - `apps/fe/app/auth/login/page.tsx` - 로그인 페이지
 - `apps/fe/app/auth/register/page.tsx` - 회원가입 페이지
 - `apps/fe/app/auth/layout.tsx` - 인증 레이아웃
 
 **수정된 파일 (6개)**:
+
 - `apps/fe/src/config/axios.ts` - 인터셉터 설정
 - `apps/fe/src/store/index.ts` - useAuthStore export
 - `apps/fe/src/provider/RootProvider.tsx` - AuthProvider 추가
@@ -61,6 +67,7 @@
 ### 1.3 초기 구현의 문제점
 
 **sessionStorage 사용**:
+
 - ❌ 탭마다 독립적인 세션
 - ❌ 탭 닫으면 로그인 해제
 - ❌ 브라우저 재시작 시 로그인 해제
@@ -70,6 +77,7 @@
 ## 2. 쿠키 마이그레이션 시도
 
 ### 2.1 목표
+
 - ✅ 브라우저 재시작 후에도 7일간 로그인 유지
 - ✅ 탭 간 자동 로그인 상태 공유
 - ✅ CSRF 보호 (SameSite: Lax)
@@ -77,6 +85,7 @@
 ### 2.2 쿠키 구현
 
 **패키지 추가**:
+
 ```json
 {
   "dependencies": {
@@ -89,6 +98,7 @@
 ```
 
 **storage.ts 쿠키 버전**:
+
 ```typescript
 import Cookies from 'js-cookie';
 
@@ -148,6 +158,7 @@ try {
 ```
 
 **문제 흐름**:
+
 ```
 1. 브라우저 재시작 → 쿠키 존재 (7일 만료)
 2. AuthProvider의 initAuth() 실행
@@ -245,6 +256,7 @@ export default function AuthProvider({
 ### 4.3 핵심 개선 사항
 
 **1. any 타입 제거**:
+
 ```typescript
 // ❌ 이전
 catch (error: any) {
@@ -265,6 +277,7 @@ setAuth(user as User, ...);
 ```
 
 **2. 조건부 clearAuth**:
+
 ```typescript
 // ✅ 401/403: 토큰 만료/무효 → 삭제
 // ✅ 네트워크 에러: 일시적 장애 → 유지
@@ -272,6 +285,7 @@ setAuth(user as User, ...);
 ```
 
 **3. 브라우저 재시작 후 작동 흐름**:
+
 ```
 1. 브라우저 재시작 → 쿠키 존재 (7일 만료)
 2. TokenStorage.hasTokens() → true
@@ -288,6 +302,7 @@ setAuth(user as User, ...);
 ### 5.1 핵심 수정 파일
 
 **1. apps/fe/package.json**
+
 ```json
 {
   "dependencies": {
@@ -300,11 +315,13 @@ setAuth(user as User, ...);
 ```
 
 **2. apps/fe/src/lib/auth/storage.ts**
+
 - sessionStorage → 쿠키 (js-cookie)
 - 7일 만료 설정
 - SameSite: 'Lax', Secure (프로덕션)
 
 **3. apps/fe/src/provider/AuthProvider.tsx**
+
 - any 타입 제거
 - AxiosError 타입 가드 추가
 - 조건부 clearAuth 로직
@@ -387,6 +404,7 @@ setAuth(user as User, ...);
 ### 7.1 타입 안정성
 
 **❌ 금지: any 타입 사용**
+
 ```typescript
 // ❌ 나쁜 예
 catch (error: any) { ... }
@@ -394,6 +412,7 @@ setAuth(user as any, ...);
 ```
 
 **✅ 권장: 명시적 타입 사용**
+
 ```typescript
 // ✅ 좋은 예
 import { AxiosError } from 'axios';
@@ -408,6 +427,7 @@ setAuth(user as User, ...);
 ### 7.2 에러 핸들링
 
 **타입 가드 사용**:
+
 ```typescript
 if (error instanceof AxiosError) {
   // AxiosError의 속성에 안전하게 접근
@@ -531,10 +551,12 @@ if (error instanceof AxiosError) {
 ### 9.1 XSS (Cross-Site Scripting)
 
 **위험**:
+
 - JavaScript로 접근 가능한 쿠키는 XSS로 탈취 가능
 - httpOnly 플래그 사용 불가 (클라이언트에서 쿠키 설정 필요)
 
 **완화**:
+
 - React의 기본 XSS 방어 (자동 이스케이프)
 - CSP 헤더 설정 권장
 - 입력 값 새니타이제이션
@@ -542,6 +564,7 @@ if (error instanceof AxiosError) {
 ### 9.2 CSRF (Cross-Site Request Forgery)
 
 **보호**:
+
 - ✅ SameSite: 'Lax' - 크로스 사이트 요청 차단
 - ✅ Authorization 헤더 사용 - 자동 전송 방지
 - ✅ 백엔드 JWT 검증
@@ -594,13 +617,13 @@ if (error instanceof AxiosError) {
 
 ### 11.3 API Endpoints
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/auth/register` | POST | ❌ | 회원가입 |
-| `/auth/login` | POST | ❌ | 로그인 |
-| `/auth/refresh` | POST | ❌ | 토큰 갱신 |
-| `/auth/logout` | POST | ✅ | 로그아웃 |
-| `/auth/me` | GET | ✅ | 현재 사용자 조회 |
+| Endpoint         | Method | Auth | Description      |
+| ---------------- | ------ | ---- | ---------------- |
+| `/auth/register` | POST   | ❌   | 회원가입         |
+| `/auth/login`    | POST   | ❌   | 로그인           |
+| `/auth/refresh`  | POST   | ❌   | 토큰 갱신        |
+| `/auth/logout`   | POST   | ✅   | 로그아웃         |
+| `/auth/me`       | GET    | ✅   | 현재 사용자 조회 |
 
 ---
 

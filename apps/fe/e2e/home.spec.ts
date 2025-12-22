@@ -11,7 +11,10 @@ test.describe('Home Page', () => {
     await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
 
     // Take a screenshot for visual verification
-    await page.screenshot({ path: 'e2e/screenshots/home-page.png', fullPage: true });
+    await page.screenshot({
+      path: 'e2e/screenshots/home-page.png',
+      fullPage: true,
+    });
   });
 
   test('should navigate successfully', async ({ page }) => {

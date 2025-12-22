@@ -10,8 +10,8 @@ export default function TodoExamplePage() {
           Todo Store (with Immer)
         </h1>
         <p className="text-lg text-gray-600">
-          Complex state management using Immer middleware for immutable
-          updates. Perfect for managing collections and nested data structures.
+          Complex state management using Immer middleware for immutable updates.
+          Perfect for managing collections and nested data structures.
         </p>
       </div>
 
@@ -124,7 +124,10 @@ const filteredTodos = todos.filter(todo => {
             </p>
             <ul className="list-disc list-inside text-gray-600 ml-4 space-y-1 mt-2">
               <li>State: todos (Todo[]), filter (FilterType)</li>
-              <li>Actions: addTodo, toggleTodo, removeTodo, setFilter, clearCompleted</li>
+              <li>
+                Actions: addTodo, toggleTodo, removeTodo, setFilter,
+                clearCompleted
+              </li>
               <li>Middleware: devtools, immer</li>
               <li>Immer enables mutable-style syntax for immutable updates</li>
             </ul>

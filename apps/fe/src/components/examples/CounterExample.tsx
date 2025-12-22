@@ -72,7 +72,9 @@ export function OptimizedCounterDisplay() {
 
   return (
     <div className="p-4 border rounded bg-gray-50">
-      <p className="text-sm text-gray-600">Optimized Display (selector usage)</p>
+      <p className="text-sm text-gray-600">
+        Optimized Display (selector usage)
+      </p>
       <p className="text-2xl font-bold">Count: {count}</p>
     </div>
   );

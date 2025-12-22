@@ -33,7 +33,8 @@ export default function UserExamplePage() {
               Loading States
             </h3>
             <p className="text-gray-600 mb-2">
-              The user store includes an <code className="bg-gray-100 px-2 py-1 rounded">isLoading</code>
+              The user store includes an{' '}
+              <code className="bg-gray-100 px-2 py-1 rounded">isLoading</code>
               flag to track async operations. This allows components to show
               loading indicators during authentication processes.
             </p>
@@ -48,7 +49,8 @@ if (isLoading) return <Spinner />;`}</code>
               Error Handling
             </h3>
             <p className="text-gray-600 mb-2">
-              The store maintains an <code className="bg-gray-100 px-2 py-1 rounded">error</code>
+              The store maintains an{' '}
+              <code className="bg-gray-100 px-2 py-1 rounded">error</code>
               state to capture and display authentication errors. This provides
               clear feedback to users when operations fail.
             </p>
@@ -95,10 +97,18 @@ return user ? <Profile user={user} /> : <LoginForm />;`}</code>
               </code>
             </p>
             <ul className="list-disc list-inside text-gray-600 ml-4 space-y-1 mt-2">
-              <li>State: user (User | null), isLoading (boolean), error (string | null)</li>
-              <li>Actions: setUser, clearUser, updateUser, setLoading, setError</li>
+              <li>
+                State: user (User | null), isLoading (boolean), error (string |
+                null)
+              </li>
+              <li>
+                Actions: setUser, clearUser, updateUser, setLoading, setError
+              </li>
               <li>Middleware: devtools</li>
-              <li>No persist - session data should not persist across browser sessions</li>
+              <li>
+                No persist - session data should not persist across browser
+                sessions
+              </li>
             </ul>
           </div>
         </div>

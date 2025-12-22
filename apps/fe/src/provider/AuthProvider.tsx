@@ -37,7 +37,10 @@ export default function AuthProvider({
         // 401/403 에러만 clearAuth (토큰 만료/무효)
         // 네트워크 에러는 토큰 유지 (다음 요청에서 재시도 가능)
         if (error instanceof AxiosError) {
-          if (error.response?.status === 401 || error.response?.status === 403) {
+          if (
+            error.response?.status === 401 ||
+            error.response?.status === 403
+          ) {
             clearAuth();
           } else {
             // 토큰은 유지하되 초기화는 완료

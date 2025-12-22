@@ -29,10 +29,10 @@ export const useCounterStore = create<CounterState>()(
       }),
       {
         name: 'counter-storage', // localStorage key
-      }
+      },
     ),
     {
       name: 'CounterStore', // DevTools name
-    }
-  )
+    },
+  ),
 );

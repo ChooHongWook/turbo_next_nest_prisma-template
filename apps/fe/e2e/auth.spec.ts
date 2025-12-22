@@ -9,7 +9,10 @@ test.describe('Authentication', () => {
     await page.waitForLoadState('networkidle');
 
     // Take a screenshot
-    await page.screenshot({ path: 'e2e/screenshots/login-page.png', fullPage: true });
+    await page.screenshot({
+      path: 'e2e/screenshots/login-page.png',
+      fullPage: true,
+    });
   });
 
   test('should handle login form interaction', async ({ page }) => {
@@ -18,15 +21,19 @@ test.describe('Authentication', () => {
 
     // Try to find common login form elements
     // Adjust selectors based on your actual login form
-    const emailInput = page.locator('input[type="email"], input[name="email"]').first();
-    const passwordInput = page.locator('input[type="password"], input[name="password"]').first();
+    const emailInput = page
+      .locator('input[type="email"], input[name="email"]')
+      .first();
+    const passwordInput = page
+      .locator('input[type="password"], input[name="password"]')
+      .first();
 
     // Check if login form elements exist
-    if (await emailInput.count() > 0) {
+    if ((await emailInput.count()) > 0) {
       await expect(emailInput).toBeVisible();
     }
 
-    if (await passwordInput.count() > 0) {
+    if ((await passwordInput.count()) > 0) {
       await expect(passwordInput).toBeVisible();
     }
   });

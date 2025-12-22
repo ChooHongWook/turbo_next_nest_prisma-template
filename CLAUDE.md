@@ -9,6 +9,7 @@ Turborepo-based monorepo with Next.js 15 frontend, NestJS 11 backend, and Prisma
 ## Essential Commands
 
 ### Development
+
 ```bash
 pnpm run dev          # Start both FE (3001) and BE (3000) in watch mode
 pnpm run build        # Build all apps/packages in dependency order
@@ -16,6 +17,7 @@ pnpm run start        # Start production builds
 ```
 
 ### Database Operations
+
 ```bash
 docker-compose up -d             # Start PostgreSQL (required first)
 pnpm run db:migrate:dev          # Create and apply migrations (runs in packages/database)
@@ -28,6 +30,7 @@ pnpm run db:studio               # Open Prisma Studio GUI (port 5555)
 **Important**: `db:migrate:dev` runs directly in `packages/database` (not via Turbo) to avoid interactive mode restrictions.
 
 ### Testing & Code Quality
+
 ```bash
 pnpm run test                    # Run all tests via Turbo
 pnpm run lint                    # ESLint across all packages
@@ -36,6 +39,7 @@ cd apps/be && pnpm run test:watch    # Watch mode for backend tests
 ```
 
 ### Environment Variables
+
 ```bash
 pnpm run sync:env     # Sync .env.shared to all apps/packages (auto-runs in predev/prebuild)
 ```
@@ -43,6 +47,7 @@ pnpm run sync:env     # Sync .env.shared to all apps/packages (auto-runs in pred
 ## Architecture
 
 ### Monorepo Structure
+
 ```
 apps/
   be/          # NestJS backend (port 3000)
@@ -65,6 +70,7 @@ The core architectural pattern ensuring type safety across the stack:
 3. **API Entities** (`packages/api/src/*/entities/*.entity.ts`) - Implement Prisma types, exported for consumption
 
 Example flow:
+
 - Define `User` in Prisma schema
 - Run `pnpm run db:generate` to generate types
 - Create `User` entity in `@repo/api` implementing Prisma's `User` type
@@ -76,6 +82,7 @@ Example flow:
 **Two distinct approaches depending on component type:**
 
 1. **Server Components → Prisma Direct Access**
+
 ```typescript
 // apps/fe/app/page.tsx
 import { prisma } from '@repo/database/client';
@@ -86,6 +93,7 @@ export default async function Home() {
 ```
 
 2. **Client Components → REST API**
+
 ```typescript
 // apps/fe/src/api/links/index.ts
 import { api } from '@config/axios';
@@ -95,6 +103,7 @@ export async function getLinks() {
 ```
 
 **When to use each:**
+
 - Server Components: Use Prisma directly for SSR (no API roundtrip needed)
 - Client Components: Use REST API for mutations and client-side fetching
 - Both share types from `@repo/api` for type safety
@@ -147,6 +156,7 @@ Frontend also uses path aliases (`@api/*`, `@config/*`, `@provider`) defined in 
 ### DTO Pattern
 
 Uses `@nestjs/mapped-types` for inheritance:
+
 ```typescript
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 ```
@@ -154,6 +164,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {}
 ### Database Seeding
 
 Uses `upsert` for idempotency:
+
 ```typescript
 await prisma.user.upsert({
   where: { email: user.email },
@@ -167,6 +178,7 @@ Safe to run multiple times without duplicates.
 ### React Query Configuration
 
 Server/client-aware QueryClient pattern in `apps/fe/src/config/get-query-client.ts`:
+
 - Server: New instance per request
 - Browser: Singleton instance
 - Defaults: `staleTime: 60000ms`, query dehydration enabled
@@ -174,6 +186,7 @@ Server/client-aware QueryClient pattern in `apps/fe/src/config/get-query-client.
 ### Turbo Task Dependencies
 
 From `turbo.json`:
+
 - `build` depends on `^build` (builds dependencies first)
 - `dev` has `persistent: true` and `cache: false`
 - Database tasks (`db:*`) have `cache: false` (prevent stale state)
@@ -193,17 +206,20 @@ From `turbo.json`:
 **CRITICAL**: This project uses **shadcn/ui** for all UI components. Always use shadcn/ui components instead of creating custom ones.
 
 **Setup:**
+
 - Components are located in `apps/fe/components/ui/`
 - Configuration: `apps/fe/components.json`
 - Styling: Tailwind CSS v3 with CSS variables
 - Utility function: `cn()` in `apps/fe/lib/utils.ts`
 
 **Adding new components:**
+
 ```bash
 npx shadcn@latest add <component-name>
 ```
 
 **Usage example:**
+
 ```typescript
 import { Button } from "@/components/ui/button";
 
@@ -216,6 +232,7 @@ export default function Page() {
 The project has shadcn MCP configured in `.mcp.json` for AI-assisted component management.
 
 **Styling guidelines:**
+
 - Use Tailwind utility classes
 - Use `cn()` utility for conditional classes
 - Follow shadcn's variant patterns for customization

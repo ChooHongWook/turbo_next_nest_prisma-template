@@ -17,7 +17,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     }
 
     const isPublicRoute = publicRoutes.some((route) =>
-      pathname.startsWith(route)
+      pathname.startsWith(route),
     );
 
     if (!isAuthenticated && !isPublicRoute) {
@@ -36,7 +36,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
   if (!isAuthenticated && !isPublicRoute) {
     return null;

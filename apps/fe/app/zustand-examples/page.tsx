@@ -147,8 +147,7 @@ export function MyComponent() {
                     fetching
                   </li>
                   <li>
-                    Use Zustand for client-side state, not server data
-                    fetching
+                    Use Zustand for client-side state, not server data fetching
                   </li>
                 </ul>
               </div>

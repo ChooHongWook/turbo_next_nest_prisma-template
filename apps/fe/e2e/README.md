@@ -10,26 +10,31 @@ This directory contains end-to-end tests for the frontend application using Play
 ## Running Tests
 
 ### Run all tests (headless)
+
 ```bash
 pnpm run test:e2e
 ```
 
 ### Run tests with UI mode (recommended for development)
+
 ```bash
 pnpm run test:e2e:ui
 ```
 
 ### Run tests in headed mode (see browser)
+
 ```bash
 pnpm run test:e2e:headed
 ```
 
 ### Debug tests
+
 ```bash
 pnpm run test:e2e:debug
 ```
 
 ### View test report
+
 ```bash
 pnpm run test:e2e:report
 ```
@@ -62,6 +67,7 @@ test('should load page', async ({ page }) => {
 Playwright configuration is in `playwright.config.ts` at the app root.
 
 Key settings:
+
 - Base URL: http://localhost:3001
 - Test directory: ./e2e
 - Browsers: Chromium
@@ -70,6 +76,7 @@ Key settings:
 ## CI/CD
 
 Tests are configured to:
+
 - Retry 2 times on CI
 - Run sequentially on CI
 - Fail build if `test.only` is found

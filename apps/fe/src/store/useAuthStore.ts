@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
           },
           false,
-          'setAuth'
+          'setAuth',
         );
       },
 
@@ -53,12 +53,11 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
           },
           false,
-          'clearAuth'
+          'clearAuth',
         );
       },
 
-      setUser: (user) =>
-        set({ user, isAuthenticated: true }, false, 'setUser'),
+      setUser: (user) => set({ user, isAuthenticated: true }, false, 'setUser'),
 
       updateTokens: (accessToken, refreshToken) => {
         TokenStorage.setTokens(accessToken, refreshToken);
@@ -73,6 +72,6 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'AuthStore',
-    }
-  )
+    },
+  ),
 );

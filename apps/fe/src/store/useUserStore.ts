@@ -43,7 +43,7 @@ export const useUserStore = create<UserState>()(
             user: state.user ? { ...state.user, ...updates } : null,
           }),
           false,
-          'updateUser'
+          'updateUser',
         ),
 
       setLoading: (isLoading: boolean) =>
@@ -54,6 +54,6 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'UserStore',
-    }
-  )
+    },
+  ),
 );

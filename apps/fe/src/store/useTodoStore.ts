@@ -66,6 +66,6 @@ export const useTodoStore = create<TodoState>()(
     })),
     {
       name: 'TodoStore',
-    }
-  )
+    },
+  ),
 );

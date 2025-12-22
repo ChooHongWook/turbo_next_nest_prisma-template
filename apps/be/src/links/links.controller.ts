@@ -20,7 +20,11 @@ export class LinksController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new link' })
-  @ApiResponse({ status: 201, description: 'Link created successfully', type: Link })
+  @ApiResponse({
+    status: 201,
+    description: 'Link created successfully',
+    type: Link,
+  })
   @ApiResponse({ status: 400, description: 'Bad request' })
   create(@Body() createLinkDto: CreateLinkDto) {
     return this.linksService.create(createLinkDto);
@@ -43,7 +47,11 @@ export class LinksController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a link' })
-  @ApiResponse({ status: 200, description: 'Link updated successfully', type: Link })
+  @ApiResponse({
+    status: 200,
+    description: 'Link updated successfully',
+    type: Link,
+  })
   @ApiResponse({ status: 404, description: 'Link not found' })
   update(@Param('id') id: string, @Body() updateLinkDto: UpdateLinkDto) {
     return this.linksService.update(+id, updateLinkDto);
@@ -51,7 +59,11 @@ export class LinksController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a link' })
-  @ApiResponse({ status: 200, description: 'Link deleted successfully', type: Link })
+  @ApiResponse({
+    status: 200,
+    description: 'Link deleted successfully',
+    type: Link,
+  })
   @ApiResponse({ status: 404, description: 'Link not found' })
   remove(@Param('id') id: string) {
     return this.linksService.remove(+id);
