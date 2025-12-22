@@ -6,4 +6,22 @@ export default [
   {
     ignores: ['.prettierrc.mjs', 'eslint.config.mjs'],
   },
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'turbo/no-undeclared-env-vars': [
+        'error',
+        {
+          allowList: ['NODE_ENV', 'JWT_SECRET'],
+        },
+      ],
+    },
+  },
 ];

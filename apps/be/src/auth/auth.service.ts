@@ -83,9 +83,7 @@ export class AuthService {
     );
   }
 
-  async refreshTokens(
-    refreshTokenDto: RefreshTokenDto,
-  ): Promise<AuthResponse> {
+  async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<AuthResponse> {
     const { refreshToken } = refreshTokenDto;
 
     try {
@@ -118,7 +116,7 @@ export class AuthService {
         tokens.refreshToken,
         userWithoutSensitive,
       );
-    } catch (error) {
+    } catch (_error) {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }

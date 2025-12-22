@@ -1,0 +1,12 @@
+{
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "atlassian",
+    "playwright"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run lint)"
+    ]
+  }
+}

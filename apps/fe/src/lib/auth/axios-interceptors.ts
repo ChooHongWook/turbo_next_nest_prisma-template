@@ -5,10 +5,10 @@ import { refreshTokens } from '@/api/auth';
 let isRefreshing = false;
 let failedQueue: Array<{
   resolve: (token: string) => void;
-  reject: (error: any) => void;
+  reject: (error: unknown) => void;
 }> = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -22,7 +22,6 @@ const processQueue = (error: any, token: string | null = null) => {
 export function setupAuthInterceptors(axiosInstance: AxiosInstance) {
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const isAuthEndpoint = config.url?.includes('/auth/');
       const isPublicAuth =
         config.url?.includes('/auth/login') ||
         config.url?.includes('/auth/register') ||

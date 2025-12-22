@@ -32,10 +32,10 @@ export function RegisterForm() {
       const response = await registerUser(formData);
       setAuth(response.user, response.accessToken, response.refreshToken);
       router.push('/');
-    } catch (err: any) {
+    } catch (err: unknown) {
       const message =
-        err.response?.data?.message ||
-        'Registration failed. Email may already be in use.';
+        (err as { response?: { data?: { message?: string } } }).response?.data
+          ?.message || 'Registration failed. Email may already be in use.';
       setError(message);
     } finally {
       setLoading(false);

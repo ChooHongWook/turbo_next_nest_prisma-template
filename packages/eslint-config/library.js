@@ -18,9 +18,6 @@ export const libraryConfig = [
         sourceType: 'module',
       },
     },
-    env: {
-      node: true,
-    },
     settings: {
       'import/resolver': {
         typescript: {

@@ -138,7 +138,7 @@ export function MyComponent() {
                   <li>
                     Zustand only works in Client Components (
                     <code className="bg-gray-100 px-1 rounded">
-                      'use client'
+                      &apos;use client&apos;
                     </code>
                     )
                   </li>

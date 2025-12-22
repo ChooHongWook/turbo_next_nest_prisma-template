@@ -25,10 +25,10 @@ export function LoginForm() {
       const response = await login(formData);
       setAuth(response.user, response.accessToken, response.refreshToken);
       router.push('/');
-    } catch (err: any) {
+    } catch (err: unknown) {
       const message =
-        err.response?.data?.message ||
-        'Login failed. Please check your credentials.';
+        (err as { response?: { data?: { message?: string } } }).response?.data
+          ?.message || 'Login failed. Please check your credentials.';
       setError(message);
     } finally {
       setLoading(false);
