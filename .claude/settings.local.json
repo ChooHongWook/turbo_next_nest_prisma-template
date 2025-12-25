@@ -12,7 +12,9 @@
       "Bash(pnpm run sync:env:*)",
       "Bash(pnpm -w run sync:env:*)",
       "Bash(cat:*)",
-      "Bash(pnpm run build:*)"
+      "Bash(pnpm run build:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(pnpm run test:e2e:*)"
     ]
   },
   "enabledMcpjsonServers": ["shadcn", "atlassian", "playwright"]
