@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Session, SessionData } from 'express-session';
+import { User as PrismaUser } from '@repo/database/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   RegisterDto,
@@ -23,7 +24,7 @@ export class AuthService {
   ) {}
 
   private async createSession(
-    session: Session,
+    session: Session & Partial<SessionData>,
     userId: number,
     rememberMe: boolean = false,
   ): Promise<void> {
@@ -164,7 +165,9 @@ export class AuthService {
     });
   }
 
-  async getCurrentUser(session: Session & Partial<SessionData>): Promise<any> {
+  async getCurrentUser(
+    session: Session & Partial<SessionData>,
+  ): Promise<Omit<PrismaUser, 'password' | 'refreshToken'>> {
     if (!session.userId) {
       throw new UnauthorizedException('No active session');
     }
@@ -193,5 +196,11 @@ export class AuthService {
     ]);
 
     return { accessToken, refreshToken };
+  }
+
+  async validateUser(userId: number) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+    });
   }
 }

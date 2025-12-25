@@ -40,7 +40,11 @@ export class SessionService implements OnModuleDestroy {
   }
 
   // 세션 데이터 저장
-  async setSession(sessionId: string, data: any, ttl?: number): Promise<void> {
+  async setSession(
+    sessionId: string,
+    data: Record<string, unknown>,
+    ttl?: number,
+  ): Promise<void> {
     const key = `sess:${sessionId}`;
     const value = JSON.stringify(data);
 
@@ -52,14 +56,16 @@ export class SessionService implements OnModuleDestroy {
   }
 
   // 세션 데이터 조회
-  async getSession<T = any>(sessionId: string): Promise<T | null> {
+  async getSession<T = Record<string, unknown>>(
+    sessionId: string,
+  ): Promise<T | null> {
     const key = `sess:${sessionId}`;
     const data = await this.redisClient.get(key);
 
     if (!data) return null;
 
     try {
-      return JSON.parse(data) as T;
+      return JSON.parse(String(data)) as T;
     } catch {
       return null;
     }

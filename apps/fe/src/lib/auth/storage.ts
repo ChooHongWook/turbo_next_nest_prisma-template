@@ -33,6 +33,21 @@ export const SessionStorage = {
     // 세션 쿠키는 서버에서 관리하므로 클라이언트에서 할 일 없음
     // 로그아웃 API 호출 시 서버가 세션을 삭제함
   },
+
+  // ===== 하위 호환성을 위한 메서드들 =====
+  // 세션 기반에서는 사용되지 않지만, 기존 코드 호환성 유지
+  getAccessToken: (): string | null => null,
+  setAccessToken: (_token: string): void => {},
+  getRefreshToken: (): string | null => null,
+  setRefreshToken: (_token: string): void => {},
+  setTokens: (
+    _accessToken: string,
+    _refreshToken: string,
+    _rememberMe = false,
+  ): void => {},
+  clearTokens: (): void => {},
+  hasTokens: (): boolean => true, // API에서 검증
+  isRememberMe: (): boolean => false,
 };
 
 // 하위 호환성을 위한 alias

@@ -136,6 +136,43 @@ Frontend also uses path aliases (`@api/*`, `@config/*`, `@provider`) defined in 
 
 ## Key Development Patterns
 
+### TypeScript Type Safety
+
+**CRITICAL**: Never use `any` type in this codebase. Always use proper TypeScript types.
+
+**Guidelines:**
+
+- Use explicit types from Prisma schema or `@repo/api`
+- Use `unknown` instead of `any` when type is truly unknown
+- Use generic types or utility types (`Partial`, `Pick`, `Omit`, etc.)
+- Use type inference when TypeScript can determine the type
+- Create custom types/interfaces when needed
+
+**Examples:**
+
+```typescript
+// ❌ BAD - Using any
+function processData(data: any) {
+  return data;
+}
+
+// ✅ GOOD - Using proper types
+import { User } from '@repo/api';
+function processUser(user: User) {
+  return user;
+}
+
+// ✅ GOOD - Using unknown for truly unknown types
+function parseJson(json: string): unknown {
+  return JSON.parse(json);
+}
+
+// ✅ GOOD - Using generics
+function getData<T>(id: string): Promise<T> {
+  return api.get<T>(`/data/${id}`);
+}
+```
+
 ### Adding a New Entity
 
 1. Update `packages/database/prisma/schema.prisma`

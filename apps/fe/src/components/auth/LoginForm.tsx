@@ -15,9 +15,8 @@ export function LoginForm() {
   const [formData, setFormData] = useState<LoginDto>({
     email: '',
     password: '',
+    rememberMe: false,
   });
-
-  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -30,7 +29,7 @@ export function LoginForm() {
         response.user,
         response.accessToken,
         response.refreshToken,
-        rememberMe,
+        formData.rememberMe,
       );
       router.push('/');
     } catch (err: unknown) {
@@ -97,8 +96,10 @@ export function LoginForm() {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="rememberMe"
-            checked={rememberMe}
-            onCheckedChange={(checked) => setRememberMe(checked === true)}
+            checked={formData.rememberMe}
+            onCheckedChange={(checked) =>
+              setFormData((prev) => ({ ...prev, rememberMe: checked === true }))
+            }
             disabled={isLoading}
           />
           <label

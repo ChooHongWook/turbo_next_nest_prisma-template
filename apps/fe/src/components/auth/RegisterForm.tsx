@@ -15,6 +15,7 @@ export function RegisterForm() {
     email: '',
     password: '',
     name: '',
+    rememberMe: false,
   });
 
   const handleSubmit = async (e: FormEvent) => {
