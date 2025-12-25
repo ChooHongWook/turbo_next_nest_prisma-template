@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Session, SessionData } from 'express-session';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   RegisterDto,
@@ -21,8 +22,27 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<AuthResponse> {
-    const { email, password, name } = registerDto;
+  private async createSession(
+    session: Session,
+    userId: number,
+    rememberMe: boolean = false,
+  ): Promise<void> {
+    session.userId = String(userId);
+    session.rememberMe = rememberMe;
+
+    // rememberMe가 true면 쿠키 유효기간을 7일로 설정
+    if (rememberMe) {
+      session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7일
+    } else {
+      session.cookie.maxAge = undefined; // 세션 쿠키 (브라우저 닫으면 삭제)
+    }
+  }
+
+  async register(
+    registerDto: RegisterDto,
+    session: Session & Partial<SessionData>,
+  ): Promise<AuthResponse> {
+    const { email, password, name, rememberMe } = registerDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -42,8 +62,13 @@ export class AuthService {
       },
     });
 
+    // 세션 생성
+    await this.createSession(session, user.id, rememberMe);
+
+    // JWT 토큰도 생성 (세션에 저장)
     const tokens = await this.generateTokens(user.id, user.email);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    session.accessToken = tokens.accessToken;
+    session.refreshToken = tokens.refreshToken;
 
     const { password: _, refreshToken: __, ...userWithoutSensitive } = user;
 
@@ -54,8 +79,11 @@ export class AuthService {
     );
   }
 
-  async login(loginDto: LoginDto): Promise<AuthResponse> {
-    const { email, password } = loginDto;
+  async login(
+    loginDto: LoginDto,
+    session: Session & Partial<SessionData>,
+  ): Promise<AuthResponse> {
+    const { email, password, rememberMe } = loginDto;
 
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -71,8 +99,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // 세션 생성
+    await this.createSession(session, user.id, rememberMe);
+
+    // JWT 토큰도 생성 (세션에 저장)
     const tokens = await this.generateTokens(user.id, user.email);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    session.accessToken = tokens.accessToken;
+    session.refreshToken = tokens.refreshToken;
 
     const { password: _, refreshToken: __, ...userWithoutSensitive } = user;
 
@@ -83,7 +116,10 @@ export class AuthService {
     );
   }
 
-  async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<AuthResponse> {
+  async refreshTokens(
+    refreshTokenDto: RefreshTokenDto,
+    session: Session & Partial<SessionData>,
+  ): Promise<AuthResponse> {
     const { refreshToken } = refreshTokenDto;
 
     try {
@@ -93,21 +129,16 @@ export class AuthService {
         where: { id: payload.sub },
       });
 
-      if (!user || !user.refreshToken) {
+      if (!user) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      const isRefreshTokenValid = await bcrypt.compare(
-        refreshToken,
-        user.refreshToken,
-      );
-
-      if (!isRefreshTokenValid) {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-
+      // 새로운 토큰 생성
       const tokens = await this.generateTokens(user.id, user.email);
-      await this.updateRefreshToken(user.id, tokens.refreshToken);
+
+      // 세션 갱신
+      session.accessToken = tokens.accessToken;
+      session.refreshToken = tokens.refreshToken;
 
       const { password: _, refreshToken: __, ...userWithoutSensitive } = user;
 
@@ -121,11 +152,33 @@ export class AuthService {
     }
   }
 
-  async logout(userId: number): Promise<void> {
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { refreshToken: null },
+  async logout(session: Session & Partial<SessionData>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      session.destroy((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
+  }
+
+  async getCurrentUser(session: Session & Partial<SessionData>): Promise<any> {
+    if (!session.userId) {
+      throw new UnauthorizedException('No active session');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: Number(session.userId) },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const { password: _, refreshToken: __, ...userWithoutSensitive } = user;
+    return userWithoutSensitive;
   }
 
   private async generateTokens(
@@ -140,23 +193,5 @@ export class AuthService {
     ]);
 
     return { accessToken, refreshToken };
-  }
-
-  private async updateRefreshToken(
-    userId: number,
-    refreshToken: string,
-  ): Promise<void> {
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { refreshToken: hashedRefreshToken },
-    });
-  }
-
-  async validateUser(userId: number) {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-    });
   }
 }

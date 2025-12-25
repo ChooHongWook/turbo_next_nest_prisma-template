@@ -16,7 +16,7 @@ const baseURL =
 
 export const api: AxiosInstance = axios.create({
   baseURL,
-  withCredentials: false,
+  withCredentials: true, // 세션 쿠키를 자동으로 포함
 });
 
 setupAuthInterceptors(api);

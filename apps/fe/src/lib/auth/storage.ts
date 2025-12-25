@@ -1,135 +1,39 @@
-import Cookies from 'js-cookie';
+/**
+ * Session-based Authentication Storage
+ *
+ * 세션 기반 인증에서는 서버가 세션 쿠키(session_id)를 자동으로 관리합니다.
+ * 프론트엔드는 토큰을 저장할 필요가 없으며, 브라우저가 자동으로 쿠키를 전송합니다.
+ *
+ * - 로그인: 서버가 세션을 생성하고 session_id 쿠키를 설정
+ * - API 요청: 브라우저가 자동으로 session_id 쿠키를 포함
+ * - 로그아웃: 서버가 세션을 삭제하고 쿠키를 제거
+ *
+ * rememberMe 옵션:
+ * - false: 세션 쿠키 (브라우저 닫으면 삭제)
+ * - true: 영구 쿠키 (7일간 유지)
+ */
 
-const ACCESS_TOKEN_KEY = 'auth_access_token';
-const REFRESH_TOKEN_KEY = 'auth_refresh_token';
-const REMEMBER_ME_KEY = 'auth_remember_me';
-
-const isClient = typeof window !== 'undefined';
-
-// 쿠키 만료: 7일 (refresh token TTL과 일치)
-const COOKIE_EXPIRES = 7;
-
-// 쿠키 설정
-const getCookieOptions = (): Cookies.CookieAttributes => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const isHttps = isClient && window.location.protocol === 'https:';
-
-  return {
-    expires: COOKIE_EXPIRES, // 7일
-    path: '/', // 전체 도메인에서 사용 가능
-    sameSite: 'Lax', // CSRF 보호 + 일반 네비게이션 허용
-    secure: isProduction && isHttps, // 프로덕션에서만 HTTPS 필수
-  };
-};
-
-// 로그인 유지 여부 확인
-const isRememberMe = (): boolean => {
-  if (!isClient) return false;
-  return localStorage.getItem(REMEMBER_ME_KEY) === 'true';
-};
-
-// Storage 전략 인터페이스
-interface StorageStrategy {
-  get(key: string): string | null;
-  set(key: string, value: string): void;
-  remove(key: string): void;
-}
-
-// 세션 스토리지 전략
-const sessionStorageStrategy: StorageStrategy = {
-  get: (key: string) => {
-    if (!isClient) return null;
-    return sessionStorage.getItem(key) || null;
+export const SessionStorage = {
+  /**
+   * 세션 쿠키가 존재하는지 확인
+   * session_id 쿠키는 HttpOnly이므로 JavaScript로 직접 읽을 수 없습니다.
+   * 대신 /auth/me API를 호출하여 세션 유효성을 확인해야 합니다.
+   */
+  hasSession: (): boolean => {
+    // 세션 쿠키는 HttpOnly이므로 클라이언트에서 직접 확인 불가
+    // API 호출로 세션 유효성을 확인해야 함
+    return true; // 항상 true 반환하고, API에서 실제 검증
   },
-  set: (key: string, value: string) => {
-    if (!isClient) return;
-    sessionStorage.setItem(key, value);
-  },
-  remove: (key: string) => {
-    if (!isClient) return;
-    sessionStorage.removeItem(key);
+
+  /**
+   * 세션 정리 (로그아웃 시 호출)
+   * 실제 세션 삭제는 서버의 /auth/logout API에서 처리됩니다.
+   */
+  clearSession: (): void => {
+    // 세션 쿠키는 서버에서 관리하므로 클라이언트에서 할 일 없음
+    // 로그아웃 API 호출 시 서버가 세션을 삭제함
   },
 };
 
-// 쿠키 스토리지 전략
-const cookieStorageStrategy: StorageStrategy = {
-  get: (key: string) => {
-    if (!isClient) return null;
-    return Cookies.get(key) || null;
-  },
-  set: (key: string, value: string) => {
-    if (!isClient) return;
-    Cookies.set(key, value, getCookieOptions());
-  },
-  remove: (key: string) => {
-    if (!isClient) return;
-    Cookies.remove(key, { path: '/' });
-  },
-};
-
-// 현재 스토리지 전략 선택
-const getStorageStrategy = (): StorageStrategy => {
-  return isRememberMe() ? cookieStorageStrategy : sessionStorageStrategy;
-};
-
-export const TokenStorage = {
-  getAccessToken: (): string | null => {
-    if (!isClient) return null;
-    const strategy = getStorageStrategy();
-    return strategy.get(ACCESS_TOKEN_KEY);
-  },
-
-  setAccessToken: (token: string): void => {
-    if (!isClient) return;
-    const strategy = getStorageStrategy();
-    strategy.set(ACCESS_TOKEN_KEY, token);
-  },
-
-  getRefreshToken: (): string | null => {
-    if (!isClient) return null;
-    const strategy = getStorageStrategy();
-    return strategy.get(REFRESH_TOKEN_KEY);
-  },
-
-  setRefreshToken: (token: string): void => {
-    if (!isClient) return;
-    const strategy = getStorageStrategy();
-    strategy.set(REFRESH_TOKEN_KEY, token);
-  },
-
-  setTokens: (
-    accessToken: string,
-    refreshToken: string,
-    rememberMe = false,
-  ): void => {
-    if (!isClient) return;
-
-    // 로그인 유지 설정 저장
-    localStorage.setItem(REMEMBER_ME_KEY, String(rememberMe));
-
-    // 토큰 저장
-    TokenStorage.setAccessToken(accessToken);
-    TokenStorage.setRefreshToken(refreshToken);
-  },
-
-  clearTokens: (): void => {
-    if (!isClient) return;
-
-    // 쿠키와 세션 스토리지 모두 정리
-    cookieStorageStrategy.remove(ACCESS_TOKEN_KEY);
-    cookieStorageStrategy.remove(REFRESH_TOKEN_KEY);
-    sessionStorageStrategy.remove(ACCESS_TOKEN_KEY);
-    sessionStorageStrategy.remove(REFRESH_TOKEN_KEY);
-
-    // 로그인 유지 설정 제거
-    localStorage.removeItem(REMEMBER_ME_KEY);
-  },
-
-  hasTokens: (): boolean => {
-    return !!(TokenStorage.getAccessToken() && TokenStorage.getRefreshToken());
-  },
-
-  isRememberMe: (): boolean => {
-    return isRememberMe();
-  },
-};
+// 하위 호환성을 위한 alias
+export const TokenStorage = SessionStorage;

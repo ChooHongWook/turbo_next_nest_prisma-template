@@ -6,12 +6,14 @@
       "Bash(pnpm playwright test:*)",
       "Bash(lsof:*)",
       "Bash(curl:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm run sync:env:*)",
+      "Bash(pnpm -w run sync:env:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm run build:*)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "shadcn",
-    "atlassian",
-    "playwright"
-  ]
+  "enabledMcpjsonServers": ["shadcn", "atlassian", "playwright"]
 }

@@ -6,6 +6,8 @@ import {
   HttpStatus,
   UseGuards,
   Get,
+  Session,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -13,6 +15,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import {
   RegisterDto,
@@ -24,6 +27,7 @@ import {
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { SessionAuthGuard } from './guards/session-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -39,8 +43,11 @@ export class AuthController {
     type: AuthResponse,
   })
   @ApiResponse({ status: 409, description: 'Email already exists' })
-  async register(@Body() registerDto: RegisterDto): Promise<AuthResponse> {
-    return this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Req() req: Request,
+  ): Promise<AuthResponse> {
+    return this.authService.register(registerDto, req.session);
   }
 
   @Public()
@@ -53,8 +60,11 @@ export class AuthController {
     type: AuthResponse,
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
-    return this.authService.login(loginDto);
+  async login(
+    @Body() loginDto: LoginDto,
+    @Req() req: Request,
+  ): Promise<AuthResponse> {
+    return this.authService.login(loginDto, req.session);
   }
 
   @Public()
@@ -69,24 +79,23 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refresh(
     @Body() refreshTokenDto: RefreshTokenDto,
+    @Req() req: Request,
   ): Promise<AuthResponse> {
-    return this.authService.refreshTokens(refreshTokenDto);
+    return this.authService.refreshTokens(refreshTokenDto, req.session);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(SessionAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 204, description: 'User successfully logged out' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async logout(@CurrentUser('id') userId: number): Promise<void> {
-    return this.authService.logout(userId);
+  async logout(@Req() req: Request): Promise<void> {
+    return this.authService.logout(req.session);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(SessionAuthGuard)
   @Get('me')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user' })
   @ApiResponse({
     status: 200,
@@ -94,8 +103,7 @@ export class AuthController {
     type: User,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getCurrentUser(@CurrentUser() user: User) {
-    const { password: _, refreshToken: __, ...userWithoutSensitive } = user;
-    return userWithoutSensitive;
+  async getCurrentUser(@Req() req: Request) {
+    return this.authService.getCurrentUser(req.session);
   }
 }
