@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuthStore } from '@/store';
 import { login } from '@/api/auth';
 import type { LoginDto } from '@repo/api';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export function LoginForm() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export function LoginForm() {
     password: '',
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -23,7 +26,12 @@ export function LoginForm() {
 
     try {
       const response = await login(formData);
-      setAuth(response.user, response.accessToken, response.refreshToken);
+      setAuth(
+        response.user,
+        response.accessToken,
+        response.refreshToken,
+        rememberMe,
+      );
       router.push('/');
     } catch (err: unknown) {
       const message =
@@ -84,6 +92,21 @@ export function LoginForm() {
             required
             disabled={isLoading}
           />
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="rememberMe"
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked === true)}
+            disabled={isLoading}
+          />
+          <label
+            htmlFor="rememberMe"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none"
+          >
+            로그인 유지 (7일)
+          </label>
         </div>
 
         {error && (

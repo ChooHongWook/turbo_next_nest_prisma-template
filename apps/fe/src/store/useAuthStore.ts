@@ -12,10 +12,19 @@ interface AuthState {
   error: string | null;
   user: AuthUser | null;
 
-  setAuth: (user: AuthUser, accessToken: string, refreshToken: string) => void;
+  setAuth: (
+    user: AuthUser,
+    accessToken: string,
+    refreshToken: string,
+    rememberMe?: boolean,
+  ) => void;
   clearAuth: () => void;
   setUser: (user: AuthUser) => void;
-  updateTokens: (accessToken: string, refreshToken: string) => void;
+  updateTokens: (
+    accessToken: string,
+    refreshToken: string,
+    rememberMe?: boolean,
+  ) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   setInitialized: (initialized: boolean) => void;
@@ -30,8 +39,8 @@ export const useAuthStore = create<AuthState>()(
       error: null,
       user: null,
 
-      setAuth: (user, accessToken, refreshToken) => {
-        TokenStorage.setTokens(accessToken, refreshToken);
+      setAuth: (user, accessToken, refreshToken, rememberMe = false) => {
+        TokenStorage.setTokens(accessToken, refreshToken, rememberMe);
         set(
           {
             user,
@@ -61,8 +70,12 @@ export const useAuthStore = create<AuthState>()(
 
       setUser: (user) => set({ user, isAuthenticated: true }, false, 'setUser'),
 
-      updateTokens: (accessToken, refreshToken) => {
-        TokenStorage.setTokens(accessToken, refreshToken);
+      updateTokens: (accessToken, refreshToken, rememberMe) => {
+        TokenStorage.setTokens(
+          accessToken,
+          refreshToken,
+          rememberMe ?? TokenStorage.isRememberMe(),
+        );
       },
 
       setLoading: (isLoading) => set({ isLoading }, false, 'setLoading'),
